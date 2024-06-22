@@ -2,6 +2,7 @@ import * as compression from 'compression';
 import * as cors from 'cors';
 import * as express from 'express';
 import helmet from 'helmet';
+import { router } from './routes';
 
 // declare express app
 const app = express();
@@ -19,7 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 
 // enable cors
-app.use(cors());
+app.use(cors({ methods: ['GET', 'POST', 'PUT'] }));
 app.options('*', cors());
+
+app.use('/v1', router);
 
 export { app };
