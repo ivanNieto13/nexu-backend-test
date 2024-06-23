@@ -16,5 +16,5 @@ const modelService = new ModelService(modelRepository);
 const brandRepository = new BrandRepository(db);
 const brandService = new BrandService(brandRepository);
 
-router.use('/brands', brandRouter(brandService));
+router.use('/brands', brandRouter(brandService, modelService));
 router.use('/models', modelRouter(modelService));
