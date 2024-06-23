@@ -1,8 +1,9 @@
 import { ModelRepositoryInterface } from '../repositories/model.repository';
+import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
 
 export interface ModelServiceInterface {
   getModelById(value: number): Promise<ModelEntityInterface>;
-  getModels(): Promise<ModelEntityInterface[]>;
+  getModels(filters?: getModelsFiltersDto): Promise<ModelEntityInterface[]>;
   updateAveragePrice(value: UpdateAveragePriceDto): Promise<ModelEntityInterface>;
 }
 
@@ -17,8 +18,8 @@ export class ModelService implements ModelServiceInterface {
     return this.modelRepository.getModelById(value);
   }
 
-  public getModels(): Promise<ModelEntityInterface[]> {
-    return this.modelRepository.getModels();
+  public getModels(filters: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
+    return this.modelRepository.getModels(filters);
   }
 
   public updateAveragePrice({ id, average_price }: UpdateAveragePriceDto): Promise<ModelEntityInterface> {
