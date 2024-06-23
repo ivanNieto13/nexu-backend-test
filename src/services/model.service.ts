@@ -2,6 +2,7 @@ import { ModelRepositoryInterface } from '../repositories/model.repository';
 
 export interface ModelServiceInterface {
   getModelById(value: number): Promise<ModelEntityInterface>;
+  getModels(): Promise<ModelEntityInterface[]>;
   updateAveragePrice(value: UpdateAveragePriceDto): Promise<ModelEntityInterface>;
 }
 
@@ -14,6 +15,10 @@ export class ModelService implements ModelServiceInterface {
 
   public getModelById(value: number): Promise<ModelEntityInterface> {
     return this.modelRepository.getModelById(value);
+  }
+
+  public getModels(): Promise<ModelEntityInterface[]> {
+    return this.modelRepository.getModels();
   }
 
   public updateAveragePrice({ id, average_price }: UpdateAveragePriceDto): Promise<ModelEntityInterface> {
