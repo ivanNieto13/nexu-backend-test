@@ -1,22 +1,20 @@
 import { Router } from 'express';
+import { brandRouter } from './brand.router';
 import { modelRouter } from './model.router';
 import { ModelService } from '../services/model.service';
 import { ModelRepository } from '../repositories/model.repository';
 import { getClient } from '../db/db.client';
+import { BrandRepository } from '../repositories/brand.repository';
+import { BrandService } from '../services/brand.service';
 
 export const router = Router();
-
-const baseRoutes = [
-  {
-    path: '/models',
-    router: modelRouter,
-  }
-];
 
 const db = getClient();
 const modelRepository = new ModelRepository(db);
 const modelService = new ModelService(modelRepository);
 
-baseRoutes.forEach((route) => {
-  router.use(route.path, route.router(modelService));
-});
+const brandRepository = new BrandRepository(db);
+const brandService = new BrandService(brandRepository);
+
+router.use('/brands', brandRouter(brandService));
+router.use('/models', modelRouter(modelService));
