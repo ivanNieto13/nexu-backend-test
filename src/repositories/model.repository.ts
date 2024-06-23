@@ -22,7 +22,7 @@ export class ModelRepository implements ModelRepositoryInterface {
       const result = await this.db.query(query, [input.id]);
       if (result.rows.length) {
         const model: ModelEntityInterface = result.rows[0];
-        input.averagePrice = model.averagePrice;
+        input.average_price = model.average_price;
         input.name = model.name;
       } else {
         input.id = undefined;
@@ -37,12 +37,12 @@ export class ModelRepository implements ModelRepositoryInterface {
   public async updateAveragePrice(value: ModelEntityInterface): Promise<ModelEntityInterface> {
     const input: ModelEntityInterface = {
       id: value.id,
-      averagePrice: value.averagePrice,
+      average_price: value.average_price,
     };
 
     const query = String(process.env.QUERY_UPDATE_AVERAGE_PRICE);
     try {
-      const result = await this.db.query(query, [input.averagePrice, input.id]);
+      const result = await this.db.query(query, [input.average_price, input.id]);
       if (result.rowCount) {
         const row = result.rows[0];
         input.id = Number(row.id);

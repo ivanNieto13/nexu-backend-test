@@ -16,10 +16,10 @@ export class ModelService implements ModelServiceInterface {
     return this.modelRepository.getModelById(value);
   }
 
-  public updateAveragePrice({ id, averagePrice }: UpdateAveragePriceDto): Promise<ModelEntityInterface> {
+  public updateAveragePrice({ id, average_price }: UpdateAveragePriceDto): Promise<ModelEntityInterface> {
     const entity: ModelEntityInterface = {
       id,
-      averagePrice,
+      average_price: average_price,
     };
 
     return this.modelRepository.updateAveragePrice(entity);

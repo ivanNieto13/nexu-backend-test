@@ -1,4 +1,4 @@
 interface UpdateAveragePriceDto {
   id: number;
-  averagePrice: number;
+  average_price: number;
 }
