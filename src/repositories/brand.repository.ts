@@ -5,6 +5,7 @@ export interface BrandRepositoryInterface {
   create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface>;
   getBrands(): Promise<BrandEntityInterface[]>;
   getBrandById(value: number): Promise<BrandEntityInterface>;
+  getBrandByName(value: string): Promise<BrandEntityInterface[]>;
 }
 
 export class BrandRepository implements BrandRepositoryInterface {
@@ -53,6 +54,30 @@ export class BrandRepository implements BrandRepositoryInterface {
     }
 
     return input as BrandEntityInterface;
+  }
+
+  public async getBrandByName(value: string): Promise<BrandEntityInterface[]> {
+    const input: Partial<BrandEntityInterface> = {
+      name: value,
+    };
+    const brands: BrandEntityInterface[] = [];
+
+    const query = String(process.env.QUERY_GET_BRAND_BY_NAME);
+    try {
+      const result = await this.db.query(query, [input.name]);
+      if (result.rows.length) {
+        for(const i of result.rows) {
+          brands.push({
+            ...i,
+            id: Number(i.id),
+          });
+        }
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return brands;
   }
 
   public async create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface> {
