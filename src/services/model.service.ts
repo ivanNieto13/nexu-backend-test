@@ -17,7 +17,7 @@ export class ModelService implements ModelServiceInterface {
   }
 
   public updateAveragePrice({ id, average_price }: UpdateAveragePriceDto): Promise<ModelEntityInterface> {
-    const entity: ModelEntityInterface = {
+    const entity: Partial<ModelEntityInterface> = {
       id,
       average_price: average_price,
     };

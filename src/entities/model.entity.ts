@@ -1,5 +1,5 @@
 interface ModelEntityInterface {
   id: number;
-  name?: string;
+  name: string;
   average_price: number;
 }
