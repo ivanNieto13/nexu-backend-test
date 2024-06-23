@@ -1,8 +1,9 @@
 import { Client } from 'pg';
+import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
 
 export interface ModelRepositoryInterface {
   getModelById(value: number): Promise<ModelEntityInterface>;
-  getModels(): Promise<ModelEntityInterface[]>;
+  getModels(filters: getModelsFiltersDto): Promise<ModelEntityInterface[]>;
   updateAveragePrice(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface>;
 }
 
@@ -35,11 +36,26 @@ export class ModelRepository implements ModelRepositoryInterface {
     return input as ModelEntityInterface;
   }
 
-  public async getModels(): Promise<ModelEntityInterface[]> {
-    const query = String(process.env.QUERY_GET_MODELS);
+  public async getModels({ greater , lower }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
+    let query = String(process.env.QUERY_GET_MODELS);
     let models: ModelEntityInterface[] = [];
+    const values: number[] = [];
+    if (greater || lower) {
+      if (greater && lower) {
+        query += String(process.env.QUERY_GET_MODELS_GREATER_LOWER);
+        values.push(Number(greater));
+        values.push(Number(lower));
+      } else if (greater) {
+        query += String(process.env.QUERY_GET_MODELS_GREATER);
+        values.push(Number(greater));
+      } else if (lower) {
+        query += String(process.env.QUERY_GET_MODELS_LOWER);
+        values.push(Number(lower));
+      }
+    }
+
     try {
-      const result = await this.db.query(query);
+      const result = await this.db.query(query, values);
       if (result.rows.length) {
         for(const i of result.rows) {
           models.push({
