@@ -36,7 +36,7 @@ export class ModelRepository implements ModelRepositoryInterface {
     return input as ModelEntityInterface;
   }
 
-  public async getModels({ greater , lower }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
+  public async getModels({ greater, lower, brand_id }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
     let query = String(process.env.QUERY_GET_MODELS);
     let models: ModelEntityInterface[] = [];
     const values: number[] = [];
@@ -52,6 +52,10 @@ export class ModelRepository implements ModelRepositoryInterface {
         query += String(process.env.QUERY_GET_MODELS_LOWER);
         values.push(Number(lower));
       }
+    }
+    if (brand_id) {
+      query += String(process.env.QUERY_GET_MODELS_BY_BRAND);
+      values.push(Number(brand_id));
     }
 
     try {
