@@ -3,6 +3,7 @@ import { BrandRepositoryInterface } from '../repositories/brand.repository';
 
 export interface BrandServiceInterface {
   getBrands(): Promise<BrandEntityInterface[]>;
+  getBrandById(value: number): Promise<BrandEntityInterface>;
 }
 
 export class BrandService implements BrandServiceInterface {
@@ -14,6 +15,10 @@ export class BrandService implements BrandServiceInterface {
 
   public getBrands(): Promise<BrandEntityInterface[]> {
     return this.brandRepository.getBrands();
+  }
+
+  public getBrandById(value: number): Promise<BrandEntityInterface> {
+    return this.brandRepository.getBrandById(value);
   }
 
 }
