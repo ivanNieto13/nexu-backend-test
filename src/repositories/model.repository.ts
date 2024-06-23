@@ -1,6 +1,7 @@
 import { Client } from 'pg';
 
 export interface ModelRepositoryInterface {
+  getModelById(value: number): Promise<ModelEntityInterface>;
   updateAveragePrice(value: ModelEntityInterface): Promise<ModelEntityInterface>;
 }
 
@@ -9,6 +10,28 @@ export class ModelRepository implements ModelRepositoryInterface {
 
   constructor(db: Client) {
     this.db = db;
+  }
+
+  public async getModelById(value: number): Promise<ModelEntityInterface> {
+    const input: Partial<ModelEntityInterface> = {
+      id: value,
+    };
+
+    const query = String(process.env.QUERY_GET_MODEL_BY_ID);
+    try {
+      const result = await this.db.query(query, [input.id]);
+      if (result.rows.length) {
+        const model: ModelEntityInterface = result.rows[0];
+        input.averagePrice = model.averagePrice;
+        input.name = model.name;
+      } else {
+        input.id = undefined;
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return input as ModelEntityInterface;
   }
 
   public async updateAveragePrice(value: ModelEntityInterface): Promise<ModelEntityInterface> {
