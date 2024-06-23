@@ -5,11 +5,11 @@ import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
 export const getModelsController = (modelService: ModelServiceInterface) => {
   return (async (req: Request, res: Response) => {
     try {
-      const filters: getModelsFiltersDto = {
+      const filters: Partial<getModelsFiltersDto> = {
         greater: req.query.greater,
         lower: req.query.lower,
       };
-      const models = await modelService.getModels(filters);
+      const models = await modelService.getModels(filters as getModelsFiltersDto);
       res.status(200);
       res.json(models);
     } catch (err) {
