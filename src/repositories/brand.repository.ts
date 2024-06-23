@@ -2,6 +2,7 @@ import { Client } from 'pg';
 import { BrandEntityInterface } from '../entities/brand.entity';
 
 export interface BrandRepositoryInterface {
+  create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface>;
   getBrands(): Promise<BrandEntityInterface[]>;
   getBrandById(value: number): Promise<BrandEntityInterface>;
 }
@@ -46,6 +47,24 @@ export class BrandRepository implements BrandRepositoryInterface {
         input.name = result.rows[0].name;
       } else {
         input.id = undefined;
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return input as BrandEntityInterface;
+  }
+
+  public async create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface> {
+    const input: Partial<BrandEntityInterface> = {
+      name: value.name,
+    };
+
+    const query = String(process.env.QUERY_CREATE_BRAND);
+    try {
+      const result = await this.db.query(query, [input.name]);
+      if (result.rows.length) {
+        input.id = Number(result.rows[0].id);
       }
     } catch (err) {
       throw err;
