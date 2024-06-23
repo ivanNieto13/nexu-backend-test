@@ -5,6 +5,7 @@ export interface BrandServiceInterface {
   create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface>;
   getBrands(): Promise<BrandEntityInterface[]>;
   getBrandById(value: number): Promise<BrandEntityInterface>;
+  getBrandByName(value: string): Promise<BrandEntityInterface[]>;
 }
 
 export class BrandService implements BrandServiceInterface {
@@ -24,6 +25,10 @@ export class BrandService implements BrandServiceInterface {
 
   public getBrandById(value: number): Promise<BrandEntityInterface> {
     return this.brandRepository.getBrandById(value);
+  }
+
+  public getBrandByName(value: string): Promise<BrandEntityInterface[]> {
+    return this.brandRepository.getBrandByName(value);
   }
 
 }
