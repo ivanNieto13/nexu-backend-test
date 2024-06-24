@@ -9,9 +9,9 @@ export const createBrandController = (brandService: BrandServiceInterface) => {
     };
 
     try {
-      const model = await brandService.create(input);
+      const brand = await brandService.create(input);
       res.status(201);
-      res.json({ data: model, message: `model successfully created`});
+      res.json({ data: brand, message: `brand successfully created`});
     } catch (err) {
       res.status(500);
       res.json({ message: err });

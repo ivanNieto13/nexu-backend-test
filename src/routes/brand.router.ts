@@ -10,6 +10,7 @@ import {
 } from '../middleware';
 import { createBrandController } from '../controllers/create-brand.controller';
 import { modelPresentInBrandMiddleware } from '../middleware/model-present-in-brand.middleware';
+import { createModelController } from '../controllers/create-model.controller';
 
 const router = Router();
 
@@ -30,6 +31,7 @@ export const brandRouter = (
       validateOptionalAveragePriceMiddleware,
       validateBrandIdExistsMiddleware(brandService),
       modelPresentInBrandMiddleware(modelService),
+      createModelController(modelService),
     )
     .get(
       validateBrandIdExistsMiddleware(brandService),
