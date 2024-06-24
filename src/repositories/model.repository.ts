@@ -3,6 +3,7 @@ import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
 import { modelPresentInBrandDto } from '../dto/model-present-in-brand.dto';
 
 export interface ModelRepositoryInterface {
+  create(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface>;
   getModelById(value: number): Promise<ModelEntityInterface>;
   modelPresentInBrand(value: modelPresentInBrandDto): Promise<Boolean>;
   getModels(filters: getModelsFiltersDto): Promise<ModelEntityInterface[]>;
@@ -14,6 +15,20 @@ export class ModelRepository implements ModelRepositoryInterface {
 
   constructor(db: Client) {
     this.db = db;
+  }
+
+  public async create(value: ModelEntityInterface): Promise<ModelEntityInterface> {
+    const query = String(process.env.QUERY_CREATE_MODEL);
+    try {
+      const result = await this.db.query(query, [value.name, value.average_price, value.brand_id]);
+      if (result.rows.length) {
+        value.id = Number(result.rows[0].id);
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return value as ModelEntityInterface;
   }
 
   public async getModelById(value: number): Promise<ModelEntityInterface> {
@@ -44,7 +59,10 @@ export class ModelRepository implements ModelRepositoryInterface {
     try {
       const result = await this.db.query(query, [value.model_name, value.brand_id]);
       if (result.rows.length) {
-        present = true;
+        const count = Number(result.rows[0].count);
+        if (count > 0) {
+          present = true;
+        }
       }
     } catch (err) {
       throw err;
