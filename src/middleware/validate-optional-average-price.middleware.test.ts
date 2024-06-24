@@ -1,6 +1,6 @@
-import { validateOptionalAveragePriceMiddleware } from './validate-optional-average-price.middleware';
-import { validateAveragePriceMiddleware } from './validate-average-price.middleware';
-import { NextFunction, Request, Response } from 'express';
+import {validateOptionalAveragePriceMiddleware} from './validate-optional-average-price.middleware';
+import {validateAveragePriceMiddleware} from './validate-average-price.middleware';
+import {NextFunction, Request, Response} from 'express';
 
 jest.mock('./validate-average-price.middleware');
 
@@ -13,14 +13,14 @@ describe('validateOptionalAveragePriceMiddleware', () => {
     req = {};
     res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     next = jest.fn();
     jest.clearAllMocks();
   });
 
   test('should call validateAveragePriceMiddleware if average_price is provided', async () => {
-    req.body = { average_price: 150000 };
+    req.body = {average_price: 150000};
 
     const middleware = validateOptionalAveragePriceMiddleware;
 

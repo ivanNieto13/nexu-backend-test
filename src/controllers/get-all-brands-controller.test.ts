@@ -1,7 +1,7 @@
-import { getAllBrandsController } from './get-all-brands-controller';
-import { BrandServiceInterface } from '../services/brand.service';
-import { Request, Response } from 'express';
-import { BrandEntityInterface } from '../entities/brand.entity';
+import {getAllBrandsController} from './get-all-brands-controller';
+import {BrandServiceInterface} from '../services/brand.service';
+import {Request, Response} from 'express';
+import {BrandEntityInterface} from '../entities/brand.entity';
 
 describe('getAllBrandsController', () => {
   let req: Partial<Request>;
@@ -12,21 +12,23 @@ describe('getAllBrandsController', () => {
     req = {};
     res = {
       status: jest.fn().mockReturnThis(),
-      json: jest.fn()
+      json: jest.fn(),
     };
     brandService = {
-      getBrands: jest.fn()
+      getBrands: jest.fn(),
     };
   });
 
   test('should return all brands and status 200', async () => {
     const brands: BrandEntityInterface[] = [
-      { id: 1, name: 'Brand 1' },
-      { id: 2, name: 'Brand 2' },
+      {id: 1, name: 'Brand 1'},
+      {id: 2, name: 'Brand 2'},
     ];
     (brandService.getBrands as jest.Mock).mockResolvedValue(brands);
 
-    const controller = getAllBrandsController(brandService as BrandServiceInterface);
+    const controller = getAllBrandsController(
+      brandService as BrandServiceInterface
+    );
 
     await controller(req as Request, res as Response);
 
@@ -37,14 +39,18 @@ describe('getAllBrandsController', () => {
 
   test('should return 500 status if an error occurs', async () => {
     const errorMessage = 'Error fetching brands';
-    (brandService.getBrands as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    (brandService.getBrands as jest.Mock).mockRejectedValue(
+      new Error(errorMessage)
+    );
 
-    const controller = getAllBrandsController(brandService as BrandServiceInterface);
+    const controller = getAllBrandsController(
+      brandService as BrandServiceInterface
+    );
 
     await controller(req as Request, res as Response);
 
     expect(brandService.getBrands).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ message: new Error(errorMessage) });
+    expect(res.json).toHaveBeenCalledWith({message: new Error(errorMessage)});
   });
 });

@@ -1,8 +1,9 @@
-import { Request, Response } from 'express';
-import { ModelServiceInterface } from '../services/model.service';
+import {Request, Response} from 'express';
+import {ModelServiceInterface} from '../services/model.service';
+import {ModelEntityInterface} from '../entities/model.entity';
 
 export const createModelController = (modelService: ModelServiceInterface) => {
-  return (async (req: Request, res: Response) => {
+  return async (req: Request, res: Response) => {
     const input: Partial<ModelEntityInterface> = {
       name: req.body.name,
       brand_id: Number(req.params.id),
@@ -14,11 +15,10 @@ export const createModelController = (modelService: ModelServiceInterface) => {
     try {
       const model = await modelService.create(input);
       res.status(201);
-      res.json({ data: model, message: `model successfully created`});
+      res.json({data: model, message: 'model successfully created'});
     } catch (err) {
       res.status(500);
-      res.json({ message: err });
+      res.json({message: err});
     }
-  });
-}
-
+  };
+};

@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
-import { ModelServiceInterface } from '../services/model.service';
-import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
+import {Request, Response} from 'express';
+import {ModelServiceInterface} from '../services/model.service';
+import {getModelsFiltersDto} from '../dto/get-models-filters.dto';
 
-export const getModelsByBrandController = (modelService: ModelServiceInterface) => {
-  return (async (req: Request, res: Response) => {
+export const getModelsByBrandController = (
+  modelService: ModelServiceInterface
+) => {
+  return async (req: Request, res: Response) => {
     try {
       const input: Partial<getModelsFiltersDto> = {
         brand_id: req.params.id,
@@ -13,7 +15,7 @@ export const getModelsByBrandController = (modelService: ModelServiceInterface) 
       res.json(models);
     } catch (err) {
       res.status(500);
-      res.json({ message: err });
+      res.json({message: err});
     }
-  });
-}
+  };
+};

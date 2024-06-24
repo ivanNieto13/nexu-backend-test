@@ -1,13 +1,16 @@
-import { Client } from 'pg';
-import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
-import { modelPresentInBrandDto } from '../dto/model-present-in-brand.dto';
+import {Client} from 'pg';
+import {getModelsFiltersDto} from '../dto/get-models-filters.dto';
+import {modelPresentInBrandDto} from '../dto/model-present-in-brand.dto';
+import {ModelEntityInterface} from '../entities/model.entity';
 
 export interface ModelRepositoryInterface {
   create(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface>;
   getModelById(value: number): Promise<ModelEntityInterface>;
   modelPresentInBrand(value: modelPresentInBrandDto): Promise<Boolean>;
   getModels(filters: getModelsFiltersDto): Promise<ModelEntityInterface[]>;
-  updateAveragePrice(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface>;
+  updateAveragePrice(
+    value: Partial<ModelEntityInterface>
+  ): Promise<ModelEntityInterface>;
 }
 
 export class ModelRepository implements ModelRepositoryInterface {
@@ -17,14 +20,21 @@ export class ModelRepository implements ModelRepositoryInterface {
     this.db = db;
   }
 
-  public async create(value: ModelEntityInterface): Promise<ModelEntityInterface> {
+  public async create(
+    value: ModelEntityInterface
+  ): Promise<ModelEntityInterface> {
     const query = String(process.env.QUERY_CREATE_MODEL);
     try {
-      const result = await this.db.query(query, [value.name, value.average_price, value.brand_id]);
+      const result = await this.db.query(query, [
+        value.name,
+        value.average_price,
+        value.brand_id,
+      ]);
       if (result.rows.length) {
         value.id = Number(result.rows[0].id);
       }
     } catch (err) {
+      console.error(err);
       throw err;
     }
 
@@ -47,17 +57,23 @@ export class ModelRepository implements ModelRepositoryInterface {
         input.id = undefined;
       }
     } catch (err) {
+      console.error(err);
       throw err;
     }
 
     return input as ModelEntityInterface;
   }
 
-  public async modelPresentInBrand(value: modelPresentInBrandDto): Promise<Boolean> {
+  public async modelPresentInBrand(
+    value: modelPresentInBrandDto
+  ): Promise<Boolean> {
     const query = String(process.env.QUERY_GET_MODEL_NOT_IN_BRAND);
     let present = false;
     try {
-      const result = await this.db.query(query, [value.model_name, value.brand_id]);
+      const result = await this.db.query(query, [
+        value.model_name,
+        value.brand_id,
+      ]);
       if (result.rows.length) {
         const count = Number(result.rows[0].count);
         if (count > 0) {
@@ -65,15 +81,20 @@ export class ModelRepository implements ModelRepositoryInterface {
         }
       }
     } catch (err) {
+      console.error(err);
       throw err;
     }
 
     return present;
   }
 
-  public async getModels({ greater, lower, brand_id }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
+  public async getModels({
+    greater,
+    lower,
+    brand_id,
+  }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
     let query = String(process.env.QUERY_GET_MODELS);
-    let models: ModelEntityInterface[] = [];
+    const models: ModelEntityInterface[] = [];
     const values: number[] = [];
     if (greater || lower) {
       if (greater && lower) {
@@ -96,7 +117,7 @@ export class ModelRepository implements ModelRepositoryInterface {
     try {
       const result = await this.db.query(query, values);
       if (result.rows.length) {
-        for(const i of result.rows) {
+        for (const i of result.rows) {
           models.push({
             ...i,
             id: Number(i.id),
@@ -105,13 +126,16 @@ export class ModelRepository implements ModelRepositoryInterface {
         }
       }
     } catch (err) {
+      console.error(err);
       throw err;
     }
 
     return models;
   }
 
-  public async updateAveragePrice(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface> {
+  public async updateAveragePrice(
+    value: Partial<ModelEntityInterface>
+  ): Promise<ModelEntityInterface> {
     const input: Partial<ModelEntityInterface> = {
       id: value.id,
       average_price: value.average_price,
@@ -119,7 +143,10 @@ export class ModelRepository implements ModelRepositoryInterface {
 
     const query = String(process.env.QUERY_UPDATE_AVERAGE_PRICE);
     try {
-      const result = await this.db.query(query, [input.average_price, input.id]);
+      const result = await this.db.query(query, [
+        input.average_price,
+        input.id,
+      ]);
       if (result.rowCount) {
         const row = result.rows[0];
         input.average_price = row.average_price;
@@ -127,6 +154,7 @@ export class ModelRepository implements ModelRepositoryInterface {
         input.id = Number(row.id);
       }
     } catch (err) {
+      console.error(err);
       throw err;
     }
 

@@ -1,5 +1,5 @@
-import { BrandEntityInterface } from '../entities/brand.entity';
-import { BrandRepositoryInterface } from '../repositories/brand.repository';
+import {BrandEntityInterface} from '../entities/brand.entity';
+import {BrandRepositoryInterface} from '../repositories/brand.repository';
 
 export interface BrandServiceInterface {
   create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface>;
@@ -15,7 +15,9 @@ export class BrandService implements BrandServiceInterface {
     this.brandRepository = brandRepository;
   }
 
-  public create(value: Partial<BrandEntityInterface>): Promise<BrandEntityInterface> {
+  public create(
+    value: Partial<BrandEntityInterface>
+  ): Promise<BrandEntityInterface> {
     return this.brandRepository.create(value);
   }
 
@@ -30,5 +32,4 @@ export class BrandService implements BrandServiceInterface {
   public getBrandByName(value: string): Promise<BrandEntityInterface[]> {
     return this.brandRepository.getBrandByName(value);
   }
-
 }

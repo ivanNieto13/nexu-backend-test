@@ -1,6 +1,9 @@
-import { Router } from 'express';
-import { getModelsController, updateAveragePriceController } from '../controllers';
-import { ModelServiceInterface } from '../services/model.service';
+import {Router} from 'express';
+import {
+  getModelsController,
+  updateAveragePriceController,
+} from '../controllers';
+import {ModelServiceInterface} from '../services/model.service';
 import {
   validateAveragePriceMiddleware,
   validateModelIdExistsMiddleware,
@@ -10,18 +13,17 @@ import {
 const router = Router();
 
 export const modelRouter = (modelService: ModelServiceInterface) => {
-  router.route('/:id')
+  router
+    .route('/:id')
     .put(
       validateAveragePriceMiddleware,
       validateModelIdExistsMiddleware(modelService),
-      updateAveragePriceController(modelService),
+      updateAveragePriceController(modelService)
     );
 
-  router.route('/')
-    .get(
-      validateModelsFiltersMiddleware,
-      getModelsController(modelService),
-    );
+  router
+    .route('/')
+    .get(validateModelsFiltersMiddleware, getModelsController(modelService));
 
   return router;
-}
+};

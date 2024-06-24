@@ -1,7 +1,5 @@
-interface ParsedQs { }
-
 export interface getModelsFiltersDto {
-  greater: string | ParsedQs | string[] | ParsedQs[] | undefined;
-  lower: string | ParsedQs | string[] | ParsedQs[] | undefined;
+  greater: string | {} | string[] | {}[] | undefined;
+  lower: string | {} | string[] | {}[] | undefined;
   brand_id: string;
 }

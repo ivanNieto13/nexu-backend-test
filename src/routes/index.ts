@@ -1,11 +1,11 @@
-import { Router } from 'express';
-import { brandRouter } from './brand.router';
-import { modelRouter } from './model.router';
-import { ModelService } from '../services/model.service';
-import { ModelRepository } from '../repositories/model.repository';
-import { getClient } from '../db/db.client';
-import { BrandRepository } from '../repositories/brand.repository';
-import { BrandService } from '../services/brand.service';
+import {Router} from 'express';
+import {brandRouter} from './brand.router';
+import {modelRouter} from './model.router';
+import {ModelService} from '../services/model.service';
+import {ModelRepository} from '../repositories/model.repository';
+import {getClient} from '../db/db.client';
+import {BrandRepository} from '../repositories/brand.repository';
+import {BrandService} from '../services/brand.service';
 
 export const router = Router();
 
