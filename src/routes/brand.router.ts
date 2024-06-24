@@ -3,7 +3,11 @@ import { BrandServiceInterface } from '../services/brand.service';
 import { getAllBrandsController } from '../controllers';
 import { ModelServiceInterface } from '../services/model.service';
 import { getModelsByBrandController } from '../controllers/get-models-by-brand.controller';
-import { validateBrandIdExistsMiddleware, validateBrandNameExistsMiddleware } from '../middleware';
+import {
+  validateBrandIdExistsMiddleware,
+  validateBrandNameExistsMiddleware,
+  validateOptionalAveragePriceMiddleware,
+} from '../middleware';
 import { createBrandController } from '../controllers/create-brand.controller';
 import { modelPresentInBrandMiddleware } from '../middleware/model-present-in-brand.middleware';
 
@@ -23,6 +27,7 @@ export const brandRouter = (
     );
   router.route('/:id/models')
     .post(
+      validateOptionalAveragePriceMiddleware,
       validateBrandIdExistsMiddleware(brandService),
       modelPresentInBrandMiddleware(modelService),
     )
