@@ -1,8 +1,10 @@
 import { Client } from 'pg';
 import { getModelsFiltersDto } from '../dto/get-models-filters.dto';
+import { modelPresentInBrandDto } from '../dto/model-present-in-brand.dto';
 
 export interface ModelRepositoryInterface {
   getModelById(value: number): Promise<ModelEntityInterface>;
+  modelPresentInBrand(value: modelPresentInBrandDto): Promise<Boolean>;
   getModels(filters: getModelsFiltersDto): Promise<ModelEntityInterface[]>;
   updateAveragePrice(value: Partial<ModelEntityInterface>): Promise<ModelEntityInterface>;
 }
@@ -34,6 +36,21 @@ export class ModelRepository implements ModelRepositoryInterface {
     }
 
     return input as ModelEntityInterface;
+  }
+
+  public async modelPresentInBrand(value: modelPresentInBrandDto): Promise<Boolean> {
+    const query = String(process.env.QUERY_GET_MODEL_NOT_IN_BRAND);
+    let present = false;
+    try {
+      const result = await this.db.query(query, [value.model_name, value.brand_id]);
+      if (result.rows.length) {
+        present = true;
+      }
+    } catch (err) {
+      throw err;
+    }
+
+    return present;
   }
 
   public async getModels({ greater, lower, brand_id }: getModelsFiltersDto): Promise<ModelEntityInterface[]> {
