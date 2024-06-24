@@ -3,12 +3,16 @@ import * as cors from 'cors';
 import * as express from 'express';
 import helmet from 'helmet';
 import {router} from './routes';
+import * as morgan from 'morgan';
 
 // declare express app
 const app = express();
 
 // add security for HTTP headers
 app.use(helmet());
+
+// add morgan logs
+app.use(morgan('combined'));
 
 // parse json request body
 app.use(express.json());
@@ -23,6 +27,6 @@ app.use(compression());
 app.use(cors({methods: ['GET', 'POST', 'PUT']}));
 app.options('*', cors());
 
-app.use('/v1', router);
+app.use('/', router);
 
 export {app};
