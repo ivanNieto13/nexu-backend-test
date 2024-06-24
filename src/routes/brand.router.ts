@@ -5,6 +5,7 @@ import { ModelServiceInterface } from '../services/model.service';
 import { getModelsByBrandController } from '../controllers/get-models-by-brand.controller';
 import { validateBrandIdExistsMiddleware, validateBrandNameExistsMiddleware } from '../middleware';
 import { createBrandController } from '../controllers/create-brand.controller';
+import { modelPresentInBrandMiddleware } from '../middleware/model-present-in-brand.middleware';
 
 const router = Router();
 
@@ -21,6 +22,10 @@ export const brandRouter = (
       getAllBrandsController(brandService),
     );
   router.route('/:id/models')
+    .post(
+      validateBrandIdExistsMiddleware(brandService),
+      modelPresentInBrandMiddleware(modelService),
+    )
     .get(
       validateBrandIdExistsMiddleware(brandService),
       getModelsByBrandController(modelService),
