@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
-const MIN_AVG_PRICE = 100000;
+import { MIN_AVG_PRICE } from './constants';
 
 export const validateModelsFiltersMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (req.query.greater) {

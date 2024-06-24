@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-
-const MIN_AVG_PRICE = 100000;
+import { MIN_AVG_PRICE } from './constants';
 
 export const validateAveragePriceMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (isNaN(Number(req.body.average_price))) {
