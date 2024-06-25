@@ -1,6 +1,9 @@
 create sequence brands_id_seq
     as BIGINT;
 
+create sequence models_id_seq
+    as BIGINT;
+
 create table brand
 (
     id   bigint default nextval('brands_id_seq'::regclass) not null
@@ -14,7 +17,7 @@ alter table brand
 
 create table model
 (
-    id            BIGINT
+    id   bigint default nextval('models_id_seq'::regclass) not null
         constraint model_pk
             primary key,
     name          varchar(50),
